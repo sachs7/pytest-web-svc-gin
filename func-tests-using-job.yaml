@@ -1,0 +1,31 @@
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#     name: my-func-tests
+# ---
+apiVersion: batch/v1
+kind: Job
+metadata:
+    name: goweb-gin-tests
+    # namespace: my-func-tests
+spec:
+    parallelism: 1
+    completions: 1
+    backoffLimit: 3
+    activeDeadlineSeconds: 20
+    template:
+        metadata:
+            labels:
+                app: "py-func-test"
+                run: "1"
+                version: "1"
+        spec:
+            restartPolicy: Never
+            containers:
+            - name: web-svc-gin-pytest
+              image: sachs7/web-svc-gin-pytest:v1.0
+              env:
+              - name: "IP"
+                value: "192.168.99.100"
+              - name: "PORT"
+                value: "30623"

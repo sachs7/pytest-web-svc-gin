@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    # matches the SidecarSet's selector
+    run: godemo-gin 
+  name: test-pod
+spec:
+  containers:
+  - name: func-test-sidecar
+    image: sachs7/web-svc-gin-pytest:v1.2
+    env:
+      - name: "IP"
+        value: "192.168.99.100"
+      - name: "PORT"
+        value: "31540"

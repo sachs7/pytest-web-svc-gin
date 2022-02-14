@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: test
+  template:
+    metadata:
+      labels:
+        component: test
+    spec:
+      containers:
+      - name: func-test
+        image: sachs7/web-svc-gin-pytest:v1.2
+        env:
+        - name: "IP"
+          value: "192.168.99.100"
+        - name: "PORT"
+          value: "31540"
