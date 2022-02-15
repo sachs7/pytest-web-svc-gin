@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+    name: goweb-gin-tests
+    namespace: my-svc
+spec:
+    parallelism: 1
+    completions: 1
+    backoffLimit: 3
+    activeDeadlineSeconds: 20
+    template:
+        metadata:
+            labels:
+                app: "py-func-test"
+                run: "1"
+                version: "1"
+        spec:
+            restartPolicy: Never
+            containers:
+            - name: web-svc-gin-pytest
+              image: sachs7/web-svc-gin-pytest:v1.0
+              # Below is the clusterIP (kubectl get svc -n my-svc)
+              # To get the ClusterIP dynamically from the environment variable
+              # Run: kubectl exec -it <MICROSERVICE-POD> -n my-svc env
+              # `env` in above command is the parameter that is passed to return all the environment variables
+              # Check for your microservicer service_host.
+              env:
+              - name: "IP"
+                value: $(GODEMO_GIN_SERVICE_SERVICE_HOST)
